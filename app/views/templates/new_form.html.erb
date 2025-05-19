@@ -1,0 +1,54 @@
+<h1> Travel Planner </h1>
+<div>
+Tell us about your dream trip — we'll use AI to help plan the perfect itinerary based on your dates, destination, preferences, and budget.
+
+</div>
+<br>
+<form action="/form_results" method="post" enctype="multipart/form-data">
+
+  <div>
+    <label for="start_date_field">Start Date</label>
+    <input type="date" id="start_date_field" name="start_date_param">
+  </div>
+
+  <div>
+    <label for="end_date_field">End Date</label>
+    <input type="date" id="end_date_field" name="end_date_param">
+  </div>
+
+  <br>
+  <div>
+    <label for="origin_field">Where from?</label>
+    <input type="text" id="origin_field" name="origin_param">
+  </div>
+
+  <div>
+    <label for="transport_field">Preferred mode of transportation?</label>
+    <select id="transport_field" name="transport_param[]">
+      <option value="car">Car</option>
+      <option value="train">Train</option>
+      <option value="plane">Plane</option>
+      <option value="bus">Bus</option>
+      <option value="bike">Bike</option>
+      <option value="walk">Walk</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="budget_field">Budget</label>
+    <input type="float" id="budget_field" name="budget_param">
+  </div>
+
+  <div>
+    <label for="description_field">Tell us about any preferences: </label>
+    <textarea type="text" id="description_field" name="description_param"></textarea>
+  </div>
+
+  <br>
+  
+  <div>
+      <button>
+        Generate a trip!
+      </button>
+  </div>
+</form>
