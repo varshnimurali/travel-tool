@@ -22,97 +22,110 @@ class TripController < ApplicationController
     c.user(@the_budget)
     c.user(@the_description)
     c.schema = '{
-    "name": "trip_itineraries",
-    "schema": {
-      "type": "object",
-      "properties": {
-        "origin_city": {
-          "type": "string",
-          "description": "The origin city from which the trip will start."
-        },
-        "preferred_mode_of_transportation": {
-          "type": "string",
-          "description": "The mode of transportation preferred for the trip."
-        },
-        "budget": {
-          "type": "number",
-          "description": "The budget allocated for the trip."
-        },
-        "preferences": {
-          "type": "object",
-          "description": "Any other preferences for the trip.",
-          "properties": {
-            "accommodation_type": {
-              "type": "string",
-              "description": "Type of accommodation preferred (e.g., hotel, hostel, apartment)."
-            },
-            "activities": {
-              "type": "array",
-              "description": "List of preferred activities during the trip.",
-              "items": {
-                "type": "string"
-              }
-            }
+      "name": "travel_itineraries",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "description": "The starting date of the trip."
           },
-          "required": [
-            "accommodation_type",
-            "activities"
-          ],
-          "additionalProperties": false
-        },
-        "itinerary_options": {
-          "type": "array",
-          "description": "Different options for itineraries based on the user preferences.",
-          "items": {
+          "end_date": {
+            "type": "string",
+            "description": "The ending date of the trip."
+          },
+          "origin_city": {
+            "type": "string",
+            "description": "The city where the user will start their trip."
+          },
+          "transportation_mode": {
+            "type": "string",
+            "description": "Preferred mode of transportation for the trip."
+          },
+          "budget": {
+            "type": "number",
+            "description": "The total budget allocated for the trip."
+          },
+          "preferences": {
             "type": "object",
+            "description": "Additional preferences for the trip.",
             "properties": {
-              "destinations": {
-                "type": "array",
-                "description": "Recommended destinations for this itinerary option.",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "accommodation": {
+              "accommodation_type": {
                 "type": "string",
-                "description": "Recommended options for accommodation."
+                "description": "Type of accommodation preferred."
               },
-              "activities": {
+              "activity_preferences": {
                 "type": "array",
-                "description": "Recommended activities for this itinerary option.",
+                "description": "List of preferred activities.",
                 "items": {
                   "type": "string"
                 }
-              },
-              "estimated_cost": {
-                "type": "number",
-                "description": "Estimated cost for this itinerary option."
               }
             },
             "required": [
-              "destinations",
-              "accommodation",
-              "activities",
-              "estimated_cost"
+              "accommodation_type",
+              "activity_preferences"
             ],
             "additionalProperties": false
+          },
+          "itineraries": {
+            "type": "array",
+            "description": "Different itinerary options based on user preferences.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "destinations": {
+                  "type": "array",
+                  "description": "Recommended destinations for the itinerary.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "accommodations": {
+                  "type": "array",
+                  "description": "Options for accommodations.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "activities": {
+                  "type": "array",
+                  "description": "Activities included in the itinerary.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "estimated_cost": {
+                  "type": "number",
+                  "description": "Estimated cost of the itinerary."
+                }
+              },
+              "required": [
+                "destinations",
+                "accommodations",
+                "activities",
+                "estimated_cost"
+              ],
+              "additionalProperties": false
+            }
           }
-        }
+        },
+        "required": [
+          "start_date",
+          "end_date",
+          "origin_city",
+          "transportation_mode",
+          "budget",
+          "preferences",
+          "itineraries"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "origin_city",
-        "preferred_mode_of_transportation",
-        "budget",
-        "preferences",
-        "itinerary_options"
-      ],
-      "additionalProperties": false
-    },
-    "strict": true
-  }'
+      "strict": true
+    }'
     @structured_output = c.assistant!
-
-    @results_itinerary_options = @structured_output.fetch("itinerary_options", [])
+    
+    @itineraries = @structured_output.fetch("itineraries", [])
 
     render({ :template => "templates/form_results"})
   end
