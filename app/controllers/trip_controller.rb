@@ -14,7 +14,7 @@ class TripController < ApplicationController
     @the_description = params.fetch("description_param", "")
     
     c = OpenAI::Chat.new
-    c.system("You are an expert travel advisor. The user will provide you with a start date, end date, origin city, preferred mode of transportation, budget, and any other preferences they have for the trip. Your job is to take all these considerations and create three different options for itineraries with recommended destinations, options for accommodations, and activities. You should also add an estimated cost for each itinerary option.")
+    c.system("You are an expert travel advisor. The user will provide you with a start date, end date, origin city, preferred mode of transportation, budget, and any other preferences they have for the trip. Your job is to take all these considerations and create three different options for itineraries with recommended destinations, options for accommodations, and comprehensive activities separated by each day (keeping in mind the time of the year and the overall duration of the trip). You should also add an estimated cost for each itinerary option.")
     c.user(@the_start_date)
     c.user(@the_end_date)
     c.user(@the_origin)
@@ -90,7 +90,7 @@ class TripController < ApplicationController
                 },
                 "activities": {
                   "type": "array",
-                  "description": "Activities included in the itinerary.",
+                  "description": "Activities included in the itinerary, broken down into granular details for each day of the trip (calculated by end_date minus start_date).",
                   "items": {
                     "type": "string"
                   }
